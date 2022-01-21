@@ -1,0 +1,18 @@
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	Um teste necessita de:
+		* Um cenário, onde tudo que necessitamos é inicializado.
+		* A execução da ação a ser testada.
+		* A validação após a ação ser executada.
+		
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	Princípios de um teste unitário (FIRST):
+	
+		Fast - Rápido de ser criado.
+		Independent - Execuções de outros testes, ou altereação de ordem de execução não devem influenciar.
+		Repeatable - Mesmo sendo executado várias vezes deve entregar os valores esperados.
+		Self-Verifying - Auto verificável.
+		Timely - Utilizado na oportunidade correta.
+		
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
