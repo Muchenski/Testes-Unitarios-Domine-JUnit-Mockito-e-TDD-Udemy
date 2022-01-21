@@ -16,3 +16,13 @@
 		Timely - Utilizado na oportunidade correta.
 		
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	Padrões xUnit:
+	
+		Test Runner - Quem executa o teste e coleta os resultados.
+		Test Fixture/Context - Pré condições necessárias aos testes.
+		Test Suites - Elenca os testes que devem ser executados.
+		Test Result Formatter - Padroniza os resultados dos testes.
+		Assertions - Verifica o comportamento ou estado do que está sendo testado. 
+		
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
