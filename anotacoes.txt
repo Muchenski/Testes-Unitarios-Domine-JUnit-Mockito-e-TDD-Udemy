@@ -26,3 +26,32 @@
 		Assertions - Verifica o comportamento ou estado do que está sendo testado. 
 		
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	Uma asserção recebe o valor esperado e o valor atual, nesta ordem.
+	
+	Um teste unitário deve executar uma única asserção.
+	
+	O I do FIRST também significa isolado.
+	
+	Desta maneira as falhas ficam muito mais rastreáveis.
+	
+	Quando, em um teste com mais de uma asserção, ocorre um erro em uma delas, as próximas deixam de ser verificadas(estando com ou sem erros).
+	
+	Porém, quando é percebido que um mesmo cenário e uma mesma ação estão se repetindo em vários testes, vale mais a pena testar com mais de uma asserção.
+	
+	Um exemplo disso são testes que checam atributos de um objeto após uma ação.
+	
+	Neste caso, há o ganho de repetir menos códigos, mas a perda de rastreabilidade.
+	
+	
+	>>>>>>> OBS <<<<<<<:
+	
+	Podemos utilizar o ErrorCollector em casos de mais de uma asserção em um mesmo teste, e mesmo que ocorram erros, 
+	as demais asserções realizadas com a instância de ErrorCollector serão executadas e assim a rastreabilidade se mantém.
+	
+	assertThat e outras parecidas recebem os argumentos na ordem inversa as asserções comuns.
+	
+	assertThat(<realidade>, <expectativa>);
+	
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
