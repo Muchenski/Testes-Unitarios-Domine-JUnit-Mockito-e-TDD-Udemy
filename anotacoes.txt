@@ -54,4 +54,29 @@
 	assertThat(<realidade>, <expectativa>);
 	
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	Quando um teste possuí algum método dentro dele que lança uma exceção para cima, não devemos colocá-lo em um try/catch e dar um Assert.fail(<mensagem>) no finally.
 	
+	Se a exceção esperada é genérica demais, devemos colocá-la em um try/catch e verificar se a mensagem da exceção é igual a mensagem que esperávamos.
+	
+	Caso a exceção esperada seja específica	podemos lançar a exceção novamente para cima, pois neste ambiente de teste o Junit irá gerenciar a exceção.
+	Assim evitamos falsos positivos.
+	
+	Clicando em cima da falha ou exceção gerada em um teste, podemos debugar o mesmo.
+	
+	Falhas são geradas a partir de asserções que não possuem a expectativa de resultado como esperado.
+	
+	Exceções são erros tratados ou não.
+	
+	Cores:
+	
+		Azul - Exceção
+		Vermelho - Falha
+		Azul - Passou
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	Sempre que for realizado um teste, realizar logo em seguida um teste com o cenário contrário é bom para verificar se realmente tudo está saindo
+	como o esperado.
+	
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
