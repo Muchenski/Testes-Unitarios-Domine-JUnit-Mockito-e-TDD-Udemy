@@ -5,7 +5,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.fail;
 
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
@@ -17,16 +21,41 @@ import br.com.testes.exceptions.LocadoraException;
 
 public class LocacaoServiceTest {
 
+	public LocacaoService locacaoService;
+	
 	@Rule
 	public ErrorCollector errorCollector = new ErrorCollector();
+	
+	// Ocorrerá antes de cada teste.
+	@Before
+	public void setup() {
+		// Para auxiliar na criação de cenários que se repetem em todos testes.
+		locacaoService = new LocacaoService();
+	}
+	
+	// Ocorrerá depois de cada teste.
+	@After
+	public void tearDown() {
+		System.out.println("After");
+	}
+	
+	// Ocorrerá antes da classe ser inicializada.
+	@BeforeClass
+	public static void setupClass() {
+		System.out.println("BeforeClass");
+	}
+	
+	// Ocorrerá após a classe ser destruída(ser retirada da memória).
+	@AfterClass
+	public static void tearDownClass() {
+		System.out.println("AfterClass");
+	}
 	
 	// O próprio Junit irá gerenciar esta exceção lançada para cima que pode ser
 	// causada pelo locacaoService.alugarFilme(...).
 	@Test
 	public void deveRealizarLocacao() {
-
 		// Cenário -> Inicializa tudo que é necessário;
-		LocacaoService locacaoService = new LocacaoService();
 		Usuario usuario = new Usuario("Henrique");
 		Filme filme = new Filme("Matrix", 1, 5.0);
 
@@ -39,7 +68,6 @@ public class LocacaoServiceTest {
 	public void deveLancarExcecao_filmeSemEstoque() {
 
 		// Cenário -> Inicializa tudo que é necessário;
-		LocacaoService locacaoService = new LocacaoService();
 		Usuario usuario = new Usuario("Henrique");
 		Filme filme = new Filme("Matrix", 0, 5.0);
 
@@ -52,7 +80,6 @@ public class LocacaoServiceTest {
 	public void deveLancarExcecao_filmeSemEstoque2() {
 
 		// Cenário -> Inicializa tudo que é necessário;
-		LocacaoService locacaoService = new LocacaoService();
 		Usuario usuario = new Usuario("Henrique");
 		Filme filme = new Filme("Matrix", 0, 5.0);
 
@@ -73,7 +100,6 @@ public class LocacaoServiceTest {
 	public void deveLancarExcecao_filmeSemEstoque3() {
 
 		// Cenário -> Inicializa tudo que é necessário;
-		LocacaoService locacaoService = new LocacaoService();
 		Usuario usuario = new Usuario("Henrique");
 		Filme filme = new Filme("Matrix", 0, 5.0);
 
@@ -90,7 +116,6 @@ public class LocacaoServiceTest {
 	public void deveLancarExcecao_UsuarioNulo() {
 
 		// Cenário -> Inicializa tudo que é necessário;
-		LocacaoService locacaoService = new LocacaoService();
 		Usuario usuario = null;
 		Filme filme = new Filme("Matrix", 1, 5.0);
 
@@ -111,7 +136,6 @@ public class LocacaoServiceTest {
 	public void deveLancarExcecao_FilmeNulo() {
 
 		// Cenário -> Inicializa tudo que é necessário;
-		LocacaoService locacaoService = new LocacaoService();
 		Usuario usuario = new Usuario("Henrique");
 		Filme filme = null;
 

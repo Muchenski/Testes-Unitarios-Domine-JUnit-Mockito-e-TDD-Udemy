@@ -80,3 +80,10 @@
 	como o esperado.
 	
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	O JUnit re-inicializa todos atributos da classe a cada execução de testes, a não ser que o atributo seja estático.
+	Desta maneira, temos certeza que todos testes iniciam do mesmo ponto de partida, e que as alterações nos atributos não irão se manter
+	em outros testes.
+	Assim, um teste não impactará nos demais.
+	
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
