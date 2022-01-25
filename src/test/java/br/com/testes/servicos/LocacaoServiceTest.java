@@ -5,6 +5,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -60,7 +62,7 @@ public class LocacaoServiceTest {
 		Filme filme = new Filme("Matrix", 1, 5.0);
 
 		// Ação
-		locacaoService.alugarFilme(usuario, filme);
+		locacaoService.alugarFilme(usuario, Arrays.asList(filme));
 	}
 
 	// Validação para se utilizar em casos de exceções específicas.
@@ -72,7 +74,7 @@ public class LocacaoServiceTest {
 		Filme filme = new Filme("Matrix", 0, 5.0);
 
 		// Ação
-		locacaoService.alugarFilme(usuario, filme);
+		locacaoService.alugarFilme(usuario, Arrays.asList(filme));
 	}
 
 	// Validação para se utilizar em casos de exceções genéricas.
@@ -85,14 +87,14 @@ public class LocacaoServiceTest {
 
 		// Ação
 		try {
-			locacaoService.alugarFilme(usuario, filme);
+			locacaoService.alugarFilme(usuario, Arrays.asList(filme));
 
 			// Validação
 			Assert.fail("Deveria ter lançado exceção");
 
 		} catch (Exception e) {
 			// Validação
-			errorCollector.checkThat(e.getMessage(), is("Filme sem estoque!"));
+			errorCollector.checkThat(e.getMessage(), is("Filme sem estoque! Nome: " + filme.getNome()));
 		}
 	}
 
@@ -104,7 +106,7 @@ public class LocacaoServiceTest {
 		Filme filme = new Filme("Matrix", 0, 5.0);
 
 		// Ação e validação
-		assertThrows(FilmeSemEstoqueException.class, () -> locacaoService.alugarFilme(usuario, filme));
+		assertThrows(FilmeSemEstoqueException.class, () -> locacaoService.alugarFilme(usuario, Arrays.asList((filme))));
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -121,7 +123,7 @@ public class LocacaoServiceTest {
 
 		// Ação
 		try {
-			locacaoService.alugarFilme(usuario, filme);
+			locacaoService.alugarFilme(usuario, Arrays.asList(filme));
 
 			// Validação
 			fail("Deveria ter lançado exceção de usuário nulo");
@@ -140,7 +142,7 @@ public class LocacaoServiceTest {
 		Filme filme = null;
 
 		// Ação e validação
-		LocadoraException ex = assertThrows(LocadoraException.class, () -> locacaoService.alugarFilme(usuario, filme));
+		LocadoraException ex = assertThrows(LocadoraException.class, () -> locacaoService.alugarFilme(usuario, Arrays.asList(filme)));
 		assertEquals("Filme não pode estar nulo!", ex.getMessage());
 	}
 

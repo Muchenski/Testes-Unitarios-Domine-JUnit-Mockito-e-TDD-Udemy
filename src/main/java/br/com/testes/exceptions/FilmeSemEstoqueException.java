@@ -4,8 +4,8 @@ public class FilmeSemEstoqueException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 	
-	public FilmeSemEstoqueException() {
-		super("Filme sem estoque!");
+	public FilmeSemEstoqueException(String filmeNome) {
+		super("Filme sem estoque! Nome: " + filmeNome);
 	}
 
 }
