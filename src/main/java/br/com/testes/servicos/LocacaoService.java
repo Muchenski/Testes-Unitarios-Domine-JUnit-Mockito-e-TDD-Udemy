@@ -23,7 +23,11 @@ public class LocacaoService {
 		locacao.addFilmes(filmes);
 		locacao.setUsuario(usuario);
 		locacao.setDataLocacao(new Date());
-		locacao.setValor(obterValoresDaLocacao(filmes));
+
+		Double valorTotalSemDesconto = obterValoresDaLocacao(filmes);
+		Double valorTotalComDesconto = obterValoresComDescontos(valorTotalSemDesconto, filmes);
+
+		locacao.setValor(valorTotalComDesconto);
 
 		// Entrega no dia seguinte
 		Date dataEntrega = new Date();
@@ -34,6 +38,29 @@ public class LocacaoService {
 		// TODO adicionar método para salvar
 
 		return locacao;
+	}
+
+	private Double obterValoresComDescontos(Double valorTotalSemDesconto, List<Filme> filmes) {
+		Double valorTotalComDesconto = valorTotalSemDesconto;
+		int numeroDeFilmes = filmes.size();
+
+		if (numeroDeFilmes > 2) {
+			valorTotalComDesconto -= (filmes.get(2).getPrecoLocacao() * 0.25);
+		}
+
+		if (numeroDeFilmes > 3) {
+			valorTotalComDesconto -= (filmes.get(3).getPrecoLocacao() * 0.50);
+		}
+
+		if (numeroDeFilmes > 4) {
+			valorTotalComDesconto -= (filmes.get(4).getPrecoLocacao() * 0.75);
+		}
+
+		if (numeroDeFilmes > 5) {
+			valorTotalComDesconto -= (filmes.get(5).getPrecoLocacao() * 1.00);
+		}
+
+		return valorTotalComDesconto;
 	}
 
 	private void validarFilmes(List<Filme> filmes) {
@@ -57,7 +84,7 @@ public class LocacaoService {
 			}
 		}
 	}
-	
+
 	private void validarUsuario(Usuario usuario) {
 		if (usuario == null) {
 			throw new LocadoraException("Usuário não pode estar nulo!");

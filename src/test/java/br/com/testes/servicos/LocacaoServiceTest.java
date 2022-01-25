@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 
 import br.com.testes.entidades.Filme;
+import br.com.testes.entidades.Locacao;
 import br.com.testes.entidades.Usuario;
 import br.com.testes.exceptions.FilmeSemEstoqueException;
 import br.com.testes.exceptions.LocadoraException;
@@ -38,19 +39,19 @@ public class LocacaoServiceTest {
 	// Ocorrerá depois de cada teste.
 	@After
 	public void tearDown() {
-		System.out.println("After");
+		// System.out.println("After");
 	}
 	
 	// Ocorrerá antes da classe ser inicializada.
 	@BeforeClass
 	public static void setupClass() {
-		System.out.println("BeforeClass");
+		// System.out.println("BeforeClass");
 	}
 	
 	// Ocorrerá após a classe ser destruída(ser retirada da memória).
 	@AfterClass
 	public static void tearDownClass() {
-		System.out.println("AfterClass");
+		// System.out.println("AfterClass");
 	}
 	
 	// O próprio Junit irá gerenciar esta exceção lançada para cima que pode ser
@@ -144,6 +145,89 @@ public class LocacaoServiceTest {
 		// Ação e validação
 		LocadoraException ex = assertThrows(LocadoraException.class, () -> locacaoService.alugarFilme(usuario, Arrays.asList(filme)));
 		assertEquals("Filme não pode estar nulo!", ex.getMessage());
+	}
+	
+	//	25% no 3º filme.
+	//	50% no 4º filme.
+	//	75% no 5º filme.
+	//	100% no 6º filme.
+	
+	@Test
+	public void devePagar75PorcentoNoTerceiroFilme() {
+		
+		// Cenário
+		Usuario usuario = new Usuario("Henrique");
+		
+		Filme f1 = new Filme("Duro de matar", 1, 4.0);
+		Filme f2 = new Filme("Matrix", 5, 4.0);
+		Filme f3 = new Filme("Casa monstro", 10, 4.0);
+		
+		// Ação
+		Locacao locacao = locacaoService.alugarFilme(usuario, Arrays.asList(f1, f2, f3));
+		
+		// Validação
+		Double valorEsperado = f1.getPrecoLocacao() + f2.getPrecoLocacao() + (f3.getPrecoLocacao() * 0.75);
+		assertEquals(valorEsperado, locacao.getValor(), 0.001);
+	}
+	
+	@Test
+	public void devePagar50PorcentoNoQuartoFilme() {
+		
+		// Cenário
+		Usuario usuario = new Usuario("Henrique");
+		
+		Filme f1 = new Filme("Duro de matar", 1, 4.0);
+		Filme f2 = new Filme("Matrix", 5, 4.0);
+		Filme f3 = new Filme("Casa monstro", 10, 4.0);
+		Filme f4 = new Filme("Motoqueiro fantasma", 6, 4.0);
+		
+		// Ação
+		Locacao locacao = locacaoService.alugarFilme(usuario, Arrays.asList(f1, f2, f3, f4));
+		
+		// Validação
+		Double valorEsperado = f1.getPrecoLocacao() + f2.getPrecoLocacao() + (f3.getPrecoLocacao() * 0.75) + (f4.getPrecoLocacao() * 0.50);
+		assertEquals(valorEsperado, locacao.getValor(), 0.001);
+	}
+	
+	@Test
+	public void devePagar25PorcentoNoQuintoFilme() {
+		
+		// Cenário
+		Usuario usuario = new Usuario("Henrique");
+		
+		Filme f1 = new Filme("Duro de matar", 1, 4.0);
+		Filme f2 = new Filme("Matrix", 5, 4.0);
+		Filme f3 = new Filme("Casa monstro", 10, 4.0);
+		Filme f4 = new Filme("Motoqueiro fantasma", 6, 4.0);
+		Filme f5 = new Filme("Mercenarios", 7, 4.0);
+		
+		// Ação
+		Locacao locacao = locacaoService.alugarFilme(usuario, Arrays.asList(f1, f2, f3, f4, f5));
+		
+		// Validação
+		Double valorEsperado = f1.getPrecoLocacao() + f2.getPrecoLocacao() + (f3.getPrecoLocacao() * 0.75) + (f4.getPrecoLocacao() * 0.50) + (f5.getPrecoLocacao() * 0.25);
+		assertEquals(valorEsperado, locacao.getValor(), 0.001);
+	}
+	
+	@Test
+	public void devePagar0PorcentoNoSextoFilme() {
+		
+		// Cenário
+		Usuario usuario = new Usuario("Henrique");
+		
+		Filme f1 = new Filme("Duro de matar", 1, 4.0);
+		Filme f2 = new Filme("Matrix", 5, 4.0);
+		Filme f3 = new Filme("Casa monstro", 10, 4.0);
+		Filme f4 = new Filme("Motoqueiro fantasma", 3, 4.0);
+		Filme f5 = new Filme("Mercenarios", 7, 4.0);
+		Filme f6 = new Filme("Hellboy", 2, 4.0);
+		
+		// Ação
+		Locacao locacao = locacaoService.alugarFilme(usuario, Arrays.asList(f1, f2, f3, f4, f5, f6));
+		
+		// Validação
+		Double valorEsperado = f1.getPrecoLocacao() + f2.getPrecoLocacao() + (f3.getPrecoLocacao() * 0.75) + (f4.getPrecoLocacao() * 0.50) + (f5.getPrecoLocacao() * 0.25) + (f5.getPrecoLocacao() * 0.0);
+		assertEquals(valorEsperado, locacao.getValor(), 0.001);
 	}
 
 }
