@@ -3,15 +3,20 @@ package br.com.testes.servicos;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.junit.Assume.assumeTrue;
 
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
@@ -21,6 +26,7 @@ import br.com.testes.entidades.Locacao;
 import br.com.testes.entidades.Usuario;
 import br.com.testes.exceptions.FilmeSemEstoqueException;
 import br.com.testes.exceptions.LocadoraException;
+import br.com.testes.utils.DataUtils;
 
 public class LocacaoServiceTest {
 
@@ -228,6 +234,41 @@ public class LocacaoServiceTest {
 		// Validação
 		Double valorEsperado = f1.getPrecoLocacao() + f2.getPrecoLocacao() + (f3.getPrecoLocacao() * 0.75) + (f4.getPrecoLocacao() * 0.50) + (f5.getPrecoLocacao() * 0.25) + (f6.getPrecoLocacao() * 0.0);
 		assertEquals(valorEsperado, locacao.getValor(), 0.001);
+	}
+	
+	// Só funciona nos sábados
+	@Ignore
+	@Test
+	public void deveDevolverNaSegundaAoAlugarNoSabado() {
+		// Cenário
+		Usuario usuario = new Usuario("Henrique");
+		
+		Filme f1 = new Filme("Duro de matar", 1, 4.0);
+		
+		// Ação
+		Locacao locacao = locacaoService.alugarFilme(usuario, Arrays.asList(f1));
+		
+		// Verificação
+		boolean segunda = DataUtils.verificarDiaSemana(locacao.getDataRetorno(), Calendar.MONDAY);
+		assertTrue(segunda);
+	}
+	
+	// Só funciona nos sábados
+	@Test
+	public void deveDevolverNaSegundaAoAlugarNoSabado2() {
+		assumeTrue(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
+		
+		// Cenário
+		Usuario usuario = new Usuario("Henrique");
+		
+		Filme f1 = new Filme("Duro de matar", 1, 4.0);
+		
+		// Ação
+		Locacao locacao = locacaoService.alugarFilme(usuario, Arrays.asList(f1));
+		
+		// Verificação
+		boolean segunda = DataUtils.verificarDiaSemana(locacao.getDataRetorno(), Calendar.MONDAY);
+		assertTrue(segunda);
 	}
 
 }

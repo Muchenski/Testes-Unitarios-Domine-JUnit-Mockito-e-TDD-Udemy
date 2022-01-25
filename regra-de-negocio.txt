@@ -4,3 +4,5 @@ As locações devem possuir descontos crescentes:
 50% no 4º filme.
 75% no 5º filme.
 100% no 6º filme.
+
+Não podemos devolver filmes nos domingos.

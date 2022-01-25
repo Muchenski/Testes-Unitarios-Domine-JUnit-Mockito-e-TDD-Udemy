@@ -93,3 +93,10 @@
 	
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
+	Quando precisamos checar se um teste possui um requisito para só assim ser executado, podemos utilizar a classe Assume.
+	Assim, o teste só será executado se a condição externa estiver sendo satisfeita, e não irá atrapalhar a bateria marcando o teste como falho.
+	Podemos também ignorar o teste utilizando @Ignore.
+	
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	
