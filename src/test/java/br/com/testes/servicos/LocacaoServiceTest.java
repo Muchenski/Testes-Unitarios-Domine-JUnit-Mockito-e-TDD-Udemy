@@ -23,7 +23,7 @@ import br.com.testes.exceptions.LocadoraException;
 
 public class LocacaoServiceTest {
 
-	public LocacaoService locacaoService;
+	private LocacaoService locacaoService;
 	
 	@Rule
 	public ErrorCollector errorCollector = new ErrorCollector();

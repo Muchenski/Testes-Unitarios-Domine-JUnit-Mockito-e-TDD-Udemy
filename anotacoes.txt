@@ -9,7 +9,7 @@
 
 	Princípios de um teste unitário (FIRST):
 	
-		Fast - Rápido de ser criado.
+		Fast - Rápido de ser criado e executado, pois a bateria deve ser executada a cada alteração realizada no código.
 		Independent - Execuções de outros testes, ou altereação de ordem de execução não devem influenciar.
 		Repeatable - Mesmo sendo executado várias vezes deve entregar os valores esperados.
 		Self-Verifying - Auto verificável.
@@ -87,3 +87,9 @@
 	Assim, um teste não impactará nos demais.
 	
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	Método tradicional: Código -> Teste -> Refatoração(se necessário).
+	TDD: Teste -> Código(o mínimo de código possível para passar no teste) -> Refatoração.
+	
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
