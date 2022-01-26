@@ -107,4 +107,14 @@
 	
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+	Uma suíte de testes é uma coleção de casos de teste ou specs destinados a testar um programa para verificar 
+	um determinado comportamento. 
+	As suítes de teste são usualmente divididas de acordo com as funcionalidades do sistema ou com o tipo 
+	de teste executado.
+
+	Podemos rodar todos testes de um pacote apenas, assim não precisamos de suítes.
+	Basta clicar com o botão direito no pacote e rodar como teste Junit.
 	
+	OBS: Se houver uma suíte dentro do pacote executado, ela irá executar normalmente, podendo ocorrer duplicações da execução de testes.
+	
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
