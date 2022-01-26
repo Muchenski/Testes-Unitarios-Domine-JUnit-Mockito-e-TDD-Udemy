@@ -118,3 +118,8 @@
 	OBS: Se houver uma suíte dentro do pacote executado, ela irá executar normalmente, podendo ocorrer duplicações da execução de testes.
 	
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	Utilizando o padrão Builder, caso uma entidade tenha um atributo removido ou adicionado no construtor, os testes não serão impactados, apenas o Builder terá
+	que ser atualizado.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------

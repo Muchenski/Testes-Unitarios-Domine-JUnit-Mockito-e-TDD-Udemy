@@ -12,6 +12,8 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
+import br.com.testes.builder.FilmeBuilder;
+import br.com.testes.builder.UsuarioBuilder;
 import br.com.testes.entidades.Filme;
 import br.com.testes.entidades.Locacao;
 import br.com.testes.entidades.Usuario;
@@ -36,13 +38,13 @@ public class CalculoValorLocacaoTest {
 		locacaoService = new LocacaoService();
 	}
 	
-	private static Filme f1 = new Filme("Duro de matar", 1, 4.0);
-	private static Filme f2 = new Filme("Matrix", 5, 4.0);
-	private static Filme f3 = new Filme("Casa monstro", 10, 4.0);
-	private static Filme f4 = new Filme("Motoqueiro fantasma", 3, 4.0);
-	private static Filme f5 = new Filme("Mercenarios", 7, 4.0);
-	private static Filme f6 = new Filme("Hellboy", 2, 4.0);
-	private static Filme f7 = new Filme("Hellboy 2", 2, 4.0);
+	private static Filme f1 = FilmeBuilder.umFilme().comNome("Duro de matar").comEstoque(1).comPrecoDeLocacao(4.0).criar();
+	private static Filme f2 = FilmeBuilder.umFilme().comNome("Matrix").comEstoque(5).comPrecoDeLocacao(4.0).criar();
+	private static Filme f3 = FilmeBuilder.umFilme().comNome("Casa monstro").comEstoque(10).comPrecoDeLocacao(4.0).criar();
+	private static Filme f4 = FilmeBuilder.umFilme().comNome("Motoqueiro fantasma").comEstoque(3).comPrecoDeLocacao(4.0).criar();
+	private static Filme f5 = FilmeBuilder.umFilme().comNome("Mercenarios").comEstoque(7).comPrecoDeLocacao(4.0).criar();
+	private static Filme f6 = FilmeBuilder.umFilme().comNome("Hellboy").comEstoque(2).comPrecoDeLocacao(4.0).criar();
+	private static Filme f7 = FilmeBuilder.umFilme().comNome("Hellboy 2").comEstoque(2).comPrecoDeLocacao(4.0).criar();
 	
 	// Coleção de cenários e os seus valores esperados.
 	// 'name' personaliza as mensagens exibidas.
@@ -62,7 +64,7 @@ public class CalculoValorLocacaoTest {
 	public void deveCalcularValorDaLocacaoConsiderandoDescontos() {
 
 		// Cenário
-		Usuario usuario = new Usuario("Henrique");
+		Usuario usuario = UsuarioBuilder.umUsuario().comNome("Henrique").criar();
 
 		// Ação
 		Locacao locacao = locacaoService.alugarFilme(usuario, filmes);

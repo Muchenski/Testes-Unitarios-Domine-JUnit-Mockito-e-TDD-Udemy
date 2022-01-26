@@ -21,6 +21,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 
+import br.com.testes.builder.FilmeBuilder;
+import br.com.testes.builder.UsuarioBuilder;
 import br.com.testes.entidades.Filme;
 import br.com.testes.entidades.Locacao;
 import br.com.testes.entidades.Usuario;
@@ -66,8 +68,8 @@ public class LocacaoServiceTest {
 	@Test
 	public void deveRealizarLocacao() {
 		// Cenário -> Inicializa tudo que é necessário;
-		Usuario usuario = new Usuario("Henrique");
-		Filme filme = new Filme("Matrix", 1, 5.0);
+		Usuario usuario = UsuarioBuilder.umUsuario().comNome("Henrique").criar();
+		Filme filme = FilmeBuilder.umFilme().comNome("Matrix").comEstoque(1).comPrecoDeLocacao(5.0).criar();
 
 		// Ação
 		Locacao locacao = locacaoService.alugarFilme(usuario, Arrays.asList(filme));
@@ -79,8 +81,8 @@ public class LocacaoServiceTest {
 	public void deveLancarExcecao_filmeSemEstoque() {
 
 		// Cenário -> Inicializa tudo que é necessário;
-		Usuario usuario = new Usuario("Henrique");
-		Filme filme = new Filme("Matrix", 0, 5.0);
+		Usuario usuario = UsuarioBuilder.umUsuario().comNome("Henrique").criar();
+		Filme filme = FilmeBuilder.umFilme().comNome("Matrix").semEstoque().comPrecoDeLocacao(5.0).criar();
 
 		// Ação
 		locacaoService.alugarFilme(usuario, Arrays.asList(filme));
@@ -91,8 +93,8 @@ public class LocacaoServiceTest {
 	public void deveLancarExcecao_filmeSemEstoque2() {
 
 		// Cenário -> Inicializa tudo que é necessário;
-		Usuario usuario = new Usuario("Henrique");
-		Filme filme = new Filme("Matrix", 0, 5.0);
+		Usuario usuario = UsuarioBuilder.umUsuario().comNome("Henrique").criar();
+		Filme filme = FilmeBuilder.umFilme().comNome("Matrix").semEstoque().comPrecoDeLocacao(5.0).criar();
 
 		// Ação
 		try {
@@ -111,8 +113,8 @@ public class LocacaoServiceTest {
 	public void deveLancarExcecao_filmeSemEstoque3() {
 
 		// Cenário -> Inicializa tudo que é necessário;
-		Usuario usuario = new Usuario("Henrique");
-		Filme filme = new Filme("Matrix", 0, 5.0);
+		Usuario usuario = UsuarioBuilder.umUsuario().comNome("Henrique").criar();
+		Filme filme = FilmeBuilder.umFilme().comNome("Matrix").semEstoque().comPrecoDeLocacao(5.0).criar();
 
 		// Ação e validação
 		assertThrows(FilmeSemEstoqueException.class, () -> locacaoService.alugarFilme(usuario, Arrays.asList((filme))));
@@ -128,7 +130,7 @@ public class LocacaoServiceTest {
 
 		// Cenário -> Inicializa tudo que é necessário;
 		Usuario usuario = null;
-		Filme filme = new Filme("Matrix", 1, 5.0);
+		Filme filme = FilmeBuilder.umFilme().comNome("Matrix").comEstoque(1).comPrecoDeLocacao(5.0).criar();
 
 		// Ação
 		try {
@@ -147,7 +149,7 @@ public class LocacaoServiceTest {
 	public void deveLancarExcecao_FilmeNulo() {
 
 		// Cenário -> Inicializa tudo que é necessário;
-		Usuario usuario = new Usuario("Henrique");
+		Usuario usuario = UsuarioBuilder.umUsuario().comNome("Henrique").criar();
 		Filme filme = null;
 
 		// Ação e validação
@@ -164,11 +166,11 @@ public class LocacaoServiceTest {
 	public void devePagar75PorcentoNoTerceiroFilme() {
 		
 		// Cenário
-		Usuario usuario = new Usuario("Henrique");
+		Usuario usuario = UsuarioBuilder.umUsuario().comNome("Henrique").criar();
 		
-		Filme f1 = new Filme("Duro de matar", 1, 4.0);
-		Filme f2 = new Filme("Matrix", 5, 4.0);
-		Filme f3 = new Filme("Casa monstro", 10, 4.0);
+		Filme f1 = FilmeBuilder.umFilme().comNome("Duro de matar").comEstoque(1).comPrecoDeLocacao(4.0).criar();
+		Filme f2 = FilmeBuilder.umFilme().comNome("Matrix").comEstoque(5).comPrecoDeLocacao(4.0).criar();
+		Filme f3 = FilmeBuilder.umFilme().comNome("Casa monstro").comEstoque(10).comPrecoDeLocacao(4.0).criar();
 		
 		// Ação
 		Locacao locacao = locacaoService.alugarFilme(usuario, Arrays.asList(f1, f2, f3));
@@ -182,12 +184,12 @@ public class LocacaoServiceTest {
 	public void devePagar50PorcentoNoQuartoFilme() {
 		
 		// Cenário
-		Usuario usuario = new Usuario("Henrique");
+		Usuario usuario = UsuarioBuilder.umUsuario().comNome("Henrique").criar();
 		
-		Filme f1 = new Filme("Duro de matar", 1, 4.0);
-		Filme f2 = new Filme("Matrix", 5, 4.0);
-		Filme f3 = new Filme("Casa monstro", 10, 4.0);
-		Filme f4 = new Filme("Motoqueiro fantasma", 6, 4.0);
+		Filme f1 = FilmeBuilder.umFilme().comNome("Duro de matar").comEstoque(1).comPrecoDeLocacao(4.0).criar();
+		Filme f2 = FilmeBuilder.umFilme().comNome("Matrix").comEstoque(5).comPrecoDeLocacao(4.0).criar();
+		Filme f3 = FilmeBuilder.umFilme().comNome("Casa monstro").comEstoque( 10).comPrecoDeLocacao(4.0).criar();
+		Filme f4 = FilmeBuilder.umFilme().comNome("Motoqueiro fantasma").comEstoque(6).comPrecoDeLocacao(4.0).criar();
 		
 		// Ação
 		Locacao locacao = locacaoService.alugarFilme(usuario, Arrays.asList(f1, f2, f3, f4));
@@ -201,13 +203,13 @@ public class LocacaoServiceTest {
 	public void devePagar25PorcentoNoQuintoFilme() {
 		
 		// Cenário
-		Usuario usuario = new Usuario("Henrique");
+		Usuario usuario = UsuarioBuilder.umUsuario().comNome("Henrique").criar();
 		
-		Filme f1 = new Filme("Duro de matar", 1, 4.0);
-		Filme f2 = new Filme("Matrix", 5, 4.0);
-		Filme f3 = new Filme("Casa monstro", 10, 4.0);
-		Filme f4 = new Filme("Motoqueiro fantasma", 6, 4.0);
-		Filme f5 = new Filme("Mercenarios", 7, 4.0);
+		Filme f1 = FilmeBuilder.umFilme().comNome("Duro de matar").comEstoque(1).comPrecoDeLocacao(4.0).criar();
+		Filme f2 = FilmeBuilder.umFilme().comNome("Matrix").comEstoque(5).comPrecoDeLocacao(4.0).criar();
+		Filme f3 = FilmeBuilder.umFilme().comNome("Casa monstro").comEstoque(10).comPrecoDeLocacao(4.0).criar();
+		Filme f4 = FilmeBuilder.umFilme().comNome("Motoqueiro fantasma").comEstoque(6).comPrecoDeLocacao(4.0).criar();
+		Filme f5 = FilmeBuilder.umFilme().comNome("Mercenarios").comEstoque(7).comPrecoDeLocacao(4.0).criar();
 		
 		// Ação
 		Locacao locacao = locacaoService.alugarFilme(usuario, Arrays.asList(f1, f2, f3, f4, f5));
@@ -221,14 +223,14 @@ public class LocacaoServiceTest {
 	public void devePagar0PorcentoNoSextoFilme() {
 		
 		// Cenário
-		Usuario usuario = new Usuario("Henrique");
+		Usuario usuario = UsuarioBuilder.umUsuario().comNome("Henrique").criar();
 		
-		Filme f1 = new Filme("Duro de matar", 1, 4.0);
-		Filme f2 = new Filme("Matrix", 5, 4.0);
-		Filme f3 = new Filme("Casa monstro", 10, 4.0);
-		Filme f4 = new Filme("Motoqueiro fantasma", 3, 4.0);
-		Filme f5 = new Filme("Mercenarios", 7, 4.0);
-		Filme f6 = new Filme("Hellboy", 2, 4.0);
+		Filme f1 = FilmeBuilder.umFilme().comNome("Duro de matar").comEstoque(1).comPrecoDeLocacao(4.0).criar();
+		Filme f2 = FilmeBuilder.umFilme().comNome("Matrix").comEstoque(5).comPrecoDeLocacao(4.0).criar();
+		Filme f3 = FilmeBuilder.umFilme().comNome("Casa monstro").comEstoque(10).comPrecoDeLocacao(4.0).criar();
+		Filme f4 = FilmeBuilder.umFilme().comNome("Motoqueiro fantasma").comEstoque(3).comPrecoDeLocacao(4.0).criar();
+		Filme f5 = FilmeBuilder.umFilme().comNome("Mercenarios").comEstoque(7).comPrecoDeLocacao(4.0).criar();
+		Filme f6 = FilmeBuilder.umFilme().comNome("Hellboy").comEstoque(2).comPrecoDeLocacao(4.0).criar();
 		
 		// Ação
 		Locacao locacao = locacaoService.alugarFilme(usuario, Arrays.asList(f1, f2, f3, f4, f5, f6));
@@ -243,9 +245,9 @@ public class LocacaoServiceTest {
 	@Test
 	public void deveDevolverNaSegundaAoAlugarNoSabado() {
 		// Cenário
-		Usuario usuario = new Usuario("Henrique");
+		Usuario usuario = UsuarioBuilder.umUsuario().comNome("Henrique").criar();
 		
-		Filme f1 = new Filme("Duro de matar", 1, 4.0);
+		Filme f1 = FilmeBuilder.umFilme().comNome("Duro de matar").comEstoque(1).comPrecoDeLocacao(4.0).criar();
 		
 		// Ação
 		Locacao locacao = locacaoService.alugarFilme(usuario, Arrays.asList(f1));
@@ -261,9 +263,9 @@ public class LocacaoServiceTest {
 		assumeTrue(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
 		
 		// Cenário
-		Usuario usuario = new Usuario("Henrique");
+		Usuario usuario = UsuarioBuilder.umUsuario().comNome("Henrique").criar();
 		
-		Filme f1 = new Filme("Duro de matar", 1, 4.0);
+		Filme f1 = FilmeBuilder.umFilme().comNome("Duro de matar").comEstoque(1).comPrecoDeLocacao(4.0).criar();
 		
 		// Ação
 		Locacao locacao = locacaoService.alugarFilme(usuario, Arrays.asList(f1));
