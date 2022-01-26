@@ -123,3 +123,10 @@
 	que ser atualizado.
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	Coberturas de teste não indicam que o código está bem testado.
+	Um teste que passe por determinadas linhas indicaria uma cobertura, mas os cenários possíveis podem não estar sendo explorados.
+	Por este motivo, os testes devem passar 100%, e a cobertura de código pode ficar entre 80% que é aceitável.
+	O mais importante nas coberturas, é analisar as linhas vermelhas e as condições que não foram exploradas todas possibilidades de caminho.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
