@@ -6,4 +6,8 @@ public class MatchersProprios {
 		return new DiaSemanaMatcher(integer);
 	}
 
+	public static DiferencaDeDiasMatcher ehHojeComDiferencaDeDias(Integer diferencaDeDias) {
+		return new DiferencaDeDiasMatcher(diferencaDeDias);
+	}
+
 }

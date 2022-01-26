@@ -70,7 +70,8 @@ public class LocacaoServiceTest {
 		Filme filme = new Filme("Matrix", 1, 5.0);
 
 		// Ação
-		locacaoService.alugarFilme(usuario, Arrays.asList(filme));
+		Locacao locacao = locacaoService.alugarFilme(usuario, Arrays.asList(filme));
+		errorCollector.checkThat(locacao.getDataRetorno(), MatchersProprios.ehHojeComDiferencaDeDias(1));
 	}
 
 	// Validação para se utilizar em casos de exceções específicas.
