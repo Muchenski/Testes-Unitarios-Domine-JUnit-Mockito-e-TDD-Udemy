@@ -130,3 +130,26 @@
 	O mais importante nas coberturas, é analisar as linhas vermelhas e as condições que não foram exploradas todas possibilidades de caminho.
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	Um teste unitário não deve possuir dependências externas, como acesso ao banco, rede, arquivos ou qualquer outra entidade externa ao código que desejamos testar.
+	
+	Em relação ao Fast:
+		Estas dependências irão demorar alguns segundos para serem carregadas(o que para testes unitários são uma eternidade).
+	
+	Em relação ao Independent: 
+		Podem ocorrer falha de rede, banco de dados não configurado, falta de massa de dados necessária para determinado cenário.
+		Um teste unitário deve ser isolado, se um teste falha, logo após devemos saber o motivo.
+		Nosso objetivo é saber o motivo da falha no nosso código, e falhas nas dependências externas comprometem esse objetivo.
+	
+	Em relação ao Repeatable:
+		Devemos garantir que o ambiente todo esteja a nossa disposição.
+		Não podemos garantir isso em relação as dependências externas.
+	
+	Em relação ao Timely:
+		se precisarmos aguardar as dependências externas estarem configuradas, não iremos conseguir realizar os testes em desenvolvimento.
+		Logo o momento oportuno para realizar o teste já terá passado.
+		
+	Por conta de dependências externas, os resultados obtidos nos testes podem variar mesmo que não alteremos o código.
+	Tudo isso porque os resultados irão ter dependência da disponibilidade das dependências externas.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------

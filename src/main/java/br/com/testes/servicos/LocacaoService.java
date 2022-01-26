@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import br.com.testes.dao.DAO;
 import br.com.testes.entidades.Filme;
 import br.com.testes.entidades.Locacao;
 import br.com.testes.entidades.Usuario;
@@ -14,6 +15,8 @@ import br.com.testes.exceptions.LocadoraException;
 import br.com.testes.utils.DataUtils;
 
 public class LocacaoService {
+	
+	private DAO<Locacao> dao;
 
 	public Locacao alugarFilme(Usuario usuario, List<Filme> filmes) {
 
@@ -42,7 +45,7 @@ public class LocacaoService {
 		locacao.setDataRetorno(dataEntrega);
 
 		// Salvando a locacao...
-		// TODO adicionar método para salvar
+		locacao = dao.salvar(locacao);
 
 		return locacao;
 	}
