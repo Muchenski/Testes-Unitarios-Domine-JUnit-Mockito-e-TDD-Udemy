@@ -98,5 +98,13 @@
 	Podemos também ignorar o teste utilizando @Ignore.
 	
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	Existem casos em que os testes seguem a mesma estrutura, alterando apenas a massa de dados de entrada(na etapa de cenário), e a massa de dados de saída(na etapa de verificação).
+	Podemos fazer uma análise de classes de equivalência, onde é pego um exemplo que represente cada uma destas classes semelhantes.
+	Se o teste em cima deste representante passar, a probabilidade de que este teste funciona para os seus semelhantes é grande.
+	Deste modo, podemos reduzir muito o código de testes.
+	O nome desta técnica é data driven test(testes orientados a dados).
+	
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	
