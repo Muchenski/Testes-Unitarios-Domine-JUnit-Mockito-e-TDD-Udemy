@@ -26,6 +26,7 @@ import br.com.testes.entidades.Locacao;
 import br.com.testes.entidades.Usuario;
 import br.com.testes.exceptions.FilmeSemEstoqueException;
 import br.com.testes.exceptions.LocadoraException;
+import br.com.testes.matchers.MatchersProprios;
 import br.com.testes.utils.DataUtils;
 
 public class LocacaoServiceTest {
@@ -267,8 +268,10 @@ public class LocacaoServiceTest {
 		Locacao locacao = locacaoService.alugarFilme(usuario, Arrays.asList(f1));
 		
 		// Verificação
-		boolean segunda = DataUtils.verificarDiaSemana(locacao.getDataRetorno(), Calendar.MONDAY);
-		assertTrue(segunda);
+		
+		// boolean segunda = DataUtils.verificarDiaSemana(locacao.getDataRetorno(), Calendar.MONDAY);
+		// assertTrue(segunda);
+		errorCollector.checkThat(locacao.getDataRetorno(), MatchersProprios.caiEm(Calendar.MONDAY));
 	}
 
 }
