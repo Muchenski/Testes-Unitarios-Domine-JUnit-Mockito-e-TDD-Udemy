@@ -159,3 +159,48 @@
 	Tudo isso porque os resultados irão ter dependência da disponibilidade das dependências externas.
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	Se em um método for utilizado um Matcher em um dos parâmetros, precisaremos utilizar Matchers em todos os outros parâmetros também.
+
+	Quando se utiliza um método de um mock, e não é definido o que ele deve retornar, será retornado o valor padrão de acordo com o tipo do retorno do método.
+	
+	Em caso de classes: null
+	Em caso de int: 0
+	Em caso de double: 0.0
+	
+	E assim por diante...
+	
+	O retorno de um método de um mock só estará de acordo se os parâmetros do método na ação forem os mesmos que
+	definimos no when(...).
+	
+	Caso contrário, o método retornará o valor padrão
+	
+	###################################################
+
+	Exemplo 01:
+	
+	when(calculadora.somar(5, 5)).thenReturn(99);
+	System.out.println(calculadora.somar(5, 5)); // 99
+	
+	###################################################
+	
+	Exemplo 02:
+	
+	when(calculadora.somar(5, 5)).thenReturn(99);
+	System.out.println(calculadora.somar(5, 2)); // 0 -> Valor padrão
+	
+	###################################################
+	
+	Quando definimos mais de um when com os mesmos parâmetros, mas com retornos diferentes, 
+	o retorno definido no último when irá sobrepor os demais.
+	
+	when(calculadora.somar(5, 5)).thenReturn(99);
+	when(calculadora.somar(5, 5)).thenReturn(222); // Sobrepondo os parâmetros.
+	
+	System.out.println(calculadora.somar(5, 5)); // 222
+	
+	when(calculadora.somar(Mockito.anyInt(), Mockito.anyInt())).thenReturn(68985); // Sobrepondo os parâmetros.
+	
+	System.out.println(calculadora.somar(5, 5)); // 68985
+	
+----------------------------------------------------------------------------------------------------------------------------------------------------------------

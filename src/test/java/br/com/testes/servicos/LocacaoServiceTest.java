@@ -6,8 +6,13 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.junit.Assume.assumeTrue;
+import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -24,6 +29,7 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
+import org.mockito.Matchers;
 
 import br.com.testes.builder.FilmeBuilder;
 import br.com.testes.builder.UsuarioBuilder;
@@ -301,6 +307,7 @@ public class LocacaoServiceTest {
 		
 		// Configurando o retorno do mock.
 		when(spcService.possuiNegativacao(usuario)).thenReturn(true);
+		// when(spcService.possuiNegativacao(Matchers.any(Usuario.class))).thenReturn(true);
 		
 		Filme f1 = FilmeBuilder.umFilme().comNome("Duro de matar").comEstoque(1).comPrecoDeLocacao(4.0).criar();
 
@@ -315,21 +322,49 @@ public class LocacaoServiceTest {
 	public void deveEnviarEmailParaLocacoesAtrasadas() {
 		
 		// Cenário
-		Usuario usuario = UsuarioBuilder.umUsuario().comNome("Henrique").criar();
+		Usuario usuarioAtrasado = UsuarioBuilder.umUsuario().comNome("Henrique").criar();
+		Usuario usuarioEmDia = UsuarioBuilder.umUsuario().comNome("Lucas").criar();
 		
-		Locacao l1 = new Locacao();
-		l1.setDataRetorno(DataUtils.obterDataComDiferencaDias(-2));
-		l1.setUsuario(usuario);
+		Locacao locacaoAtrasada1 = new Locacao();
+		locacaoAtrasada1.setDataRetorno(DataUtils.obterDataComDiferencaDias(-2));
+		locacaoAtrasada1.setUsuario(usuarioAtrasado);
 		
-		List<Locacao> locacoesAtrasadas = Arrays.asList(l1);
+		Locacao locacaoAtrasada2 = new Locacao();
+		locacaoAtrasada2.setDataRetorno(DataUtils.obterDataComDiferencaDias(-2));
+		locacaoAtrasada2.setUsuario(usuarioAtrasado);
+		
+		Locacao locacaoEmDia = new Locacao();
+		locacaoEmDia.setDataRetorno(DataUtils.obterDataComDiferencaDias(1));
+		locacaoEmDia.setUsuario(usuarioEmDia);
+		
+		List<Locacao> locacoesAtrasadas = Arrays.asList(locacaoAtrasada1, locacaoAtrasada2, locacaoEmDia);
 		
 		// Configurando o retorno do mock.
 		when(dao.obterLocacoesPendentes()).thenReturn(locacoesAtrasadas);
 		
+		// Ação
 		locacaoService.notificarAtraso();
 		
-		// Verificando se o método foi invocado.
-		verify(emailService).enviar(usuario);
+		// Verificando se o método foi invocado >> duas vezes << para qualquer instância de Usuário.
+		verify(emailService, times(2)).enviar(Matchers.any(Usuario.class));
+		
+		// Verificando se o método foi invocado >> uma vez << para o usuário atrasado.
+		// verify(emailService).enviar(usuarioAtrasado);
+		
+		// Verificando se o método foi invocado >> duas vezes << para o usuário atrasado.
+		verify(emailService, times(2)).enviar(usuarioAtrasado);
+		
+		// Verificando se o método foi invocado >> pelo menos duas vezes << para o usuário atrasado.
+		verify(emailService, atLeast(2)).enviar(usuarioAtrasado);
+		
+		// Verificando se o método não foi invocado para o usuário em dia.
+		verify(emailService, never()).enviar(usuarioEmDia);
+		
+		// Verifica se o mock que foi executado possui alguma interação não verificada.
+		verifyNoMoreInteractions(emailService);
+		
+		// No método notificarAtraso() não queremos que nenhum método do spcService seja executado.
+		verifyZeroInteractions(spcService);
 	}
 
 }

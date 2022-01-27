@@ -64,7 +64,9 @@ public class LocacaoService {
 	
 	public void notificarAtraso() {
 		dao.obterLocacoesPendentes().forEach(l -> {
-			emailService.enviar(l.getUsuario());
+			if(l.getDataRetorno().before(new Date())) {
+				emailService.enviar(l.getUsuario());
+			}
 		});
 	}
 
