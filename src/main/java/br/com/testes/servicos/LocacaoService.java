@@ -119,7 +119,16 @@ public class LocacaoService {
 		if (usuario == null) {
 			throw new LocadoraException("Usuário não pode estar nulo!");
 		}
-		if(spcService.possuiNegativacao(usuario)) {
+		
+		boolean possuiNegativacao = false;
+		
+		try {
+			possuiNegativacao = spcService.possuiNegativacao(usuario);
+		} catch(Exception e) {
+			throw new LocadoraException("Problemas com SPC, tente novamente mais tarde!");
+		}
+		
+		if(possuiNegativacao) {
 			throw new LocadoraException("Usuário negativado!");
 		}
 	}

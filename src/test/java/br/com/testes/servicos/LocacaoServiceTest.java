@@ -300,7 +300,7 @@ public class LocacaoServiceTest {
 	}
 	
 	@Test
-	public void naoDeveAlugarFilmeParaNegativadoSPC() {
+	public void naoDeveAlugarFilmeParaNegativadoSPC() throws Exception {
 		
 		// Cenário
 		Usuario usuario = UsuarioBuilder.umUsuario().comNome("Henrique").criar();
