@@ -11,14 +11,19 @@ import br.com.testes.servicos.CalculoValorLocacaoTest;
 import br.com.testes.servicos.LocacaoServiceTest;
 
 //Alterando o modo em que os testes serão executados.
-@RunWith(value = Suite.class)
+
+// @RunWith(value = Suite.class)
 
 // Classes que de testes que serão executadas por esta suíte.
+/*
 @SuiteClasses(value = {
-	LocacaoServiceTest.class, 
-	CalculoValorLocacaoTest.class, 
-	CalculadoraTest.class
+
+LocacaoServiceTest.class, 
+CalculoValorLocacaoTest.class, 
+CalculadoraTest.class
+
 })
+*/
 public class SuiteExecucao {
 	
 	// Será executado antes de carregar as classes da suíte.

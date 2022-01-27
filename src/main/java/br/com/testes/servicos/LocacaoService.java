@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import br.com.testes.dao.LocacaoDAO;
+import br.com.testes.dao.SPCService;
 import br.com.testes.entidades.Filme;
 import br.com.testes.entidades.Locacao;
 import br.com.testes.entidades.Usuario;
@@ -18,8 +19,11 @@ public class LocacaoService {
 	
 	private LocacaoDAO dao;
 	
-	public LocacaoService(LocacaoDAO dao) {
+	private SPCService spcService;
+	
+	public LocacaoService(LocacaoDAO dao, SPCService spcService) {
 		this.dao = dao;
+		this.spcService = spcService;
 	}
 
 	public Locacao alugarFilme(Usuario usuario, List<Filme> filmes) {
@@ -102,6 +106,9 @@ public class LocacaoService {
 	private void validarUsuario(Usuario usuario) {
 		if (usuario == null) {
 			throw new LocadoraException("Usuário não pode estar nulo!");
+		}
+		if(spcService.possuiNegativacao(usuario)) {
+			throw new LocadoraException("Usuário negativado!");
 		}
 	}
 

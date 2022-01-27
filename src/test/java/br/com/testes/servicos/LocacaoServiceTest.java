@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.junit.Assume.assumeTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -25,6 +26,7 @@ import org.junit.rules.ErrorCollector;
 import br.com.testes.builder.FilmeBuilder;
 import br.com.testes.builder.UsuarioBuilder;
 import br.com.testes.dao.LocacaoDAO;
+import br.com.testes.dao.SPCService;
 import br.com.testes.entidades.Filme;
 import br.com.testes.entidades.Locacao;
 import br.com.testes.entidades.Usuario;
@@ -36,6 +38,8 @@ import br.com.testes.utils.DataUtils;
 public class LocacaoServiceTest {
 	
 	private LocacaoDAO dao;
+	
+	private SPCService spcService;
 
 	private LocacaoService locacaoService;
 	
@@ -47,7 +51,8 @@ public class LocacaoServiceTest {
 	public void setup() {
 		// Para auxiliar na criação de cenários que se repetem em todos testes.
 		dao = mock(LocacaoDAO.class);
-		locacaoService = new LocacaoService(dao);
+		spcService = mock(SPCService.class);
+		locacaoService = new LocacaoService(dao, spcService);
 	}
 	
 	// Ocorrerá depois de cada teste.
@@ -280,6 +285,22 @@ public class LocacaoServiceTest {
 		// boolean segunda = DataUtils.verificarDiaSemana(locacao.getDataRetorno(), Calendar.MONDAY);
 		// assertTrue(segunda);
 		errorCollector.checkThat(locacao.getDataRetorno(), MatchersProprios.caiEm(Calendar.MONDAY));
+	}
+	
+	@Test
+	public void naoDeveAlugarFilmeParaNegativadoSPC() {
+		
+		// Cenário
+		Usuario usuario = UsuarioBuilder.umUsuario().comNome("Henrique").criar();
+		
+		// Configurando o retorno do mock.
+		when(spcService.possuiNegativacao(usuario)).thenReturn(true);
+		
+		Filme f1 = FilmeBuilder.umFilme().comNome("Duro de matar").comEstoque(1).comPrecoDeLocacao(4.0).criar();
+
+		// Ação e validação
+		LocadoraException ex = assertThrows(LocadoraException.class, () -> locacaoService.alugarFilme(usuario, Arrays.asList(f1)));
+		assertEquals("Usuário negativado!", ex.getMessage());
 	}
 
 }

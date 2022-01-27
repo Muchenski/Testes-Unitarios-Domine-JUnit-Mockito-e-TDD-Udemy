@@ -6,3 +6,5 @@ As locações devem possuir descontos crescentes:
 100% no 6º filme.
 
 Não podemos devolver filmes nos domingos.
+
+Se o usuário estiver negativado no SPC, o usuário não poderá alugar os filmes.
