@@ -1,6 +1,7 @@
 package br.com.testes.servicos;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,6 +15,7 @@ import org.junit.runners.Parameterized.Parameters;
 
 import br.com.testes.builder.FilmeBuilder;
 import br.com.testes.builder.UsuarioBuilder;
+import br.com.testes.dao.LocacaoDAO;
 import br.com.testes.entidades.Filme;
 import br.com.testes.entidades.Locacao;
 import br.com.testes.entidades.Usuario;
@@ -22,6 +24,8 @@ import br.com.testes.entidades.Usuario;
 @RunWith(value = Parameterized.class)
 public class CalculoValorLocacaoTest {
 
+	private LocacaoDAO dao;
+	
 	private LocacaoService locacaoService;
 
 	@Parameter(value = 0)
@@ -35,7 +39,8 @@ public class CalculoValorLocacaoTest {
 
 	@Before
 	public void init() {
-		locacaoService = new LocacaoService();
+		dao = mock(LocacaoDAO.class);
+		locacaoService = new LocacaoService(dao);
 	}
 	
 	private static Filme f1 = FilmeBuilder.umFilme().comNome("Duro de matar").comEstoque(1).comPrecoDeLocacao(4.0).criar();

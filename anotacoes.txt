@@ -1,5 +1,11 @@
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+	Para evitar ExceptionsInitializerError/InaccessibleObjectException
+	inserir o argumento na JVM:
+	--add-opens java.base/java.lang=ALL-UNNAMED
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 	Um teste necessita de:
 		* Um cenário, onde tudo que necessitamos é inicializado.
 		* A execução da ação a ser testada.

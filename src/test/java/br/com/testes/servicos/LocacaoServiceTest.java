@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.junit.Assume.assumeTrue;
+import static org.mockito.Mockito.mock;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -23,6 +24,7 @@ import org.junit.rules.ErrorCollector;
 
 import br.com.testes.builder.FilmeBuilder;
 import br.com.testes.builder.UsuarioBuilder;
+import br.com.testes.dao.LocacaoDAO;
 import br.com.testes.entidades.Filme;
 import br.com.testes.entidades.Locacao;
 import br.com.testes.entidades.Usuario;
@@ -32,6 +34,8 @@ import br.com.testes.matchers.MatchersProprios;
 import br.com.testes.utils.DataUtils;
 
 public class LocacaoServiceTest {
+	
+	private LocacaoDAO dao;
 
 	private LocacaoService locacaoService;
 	
@@ -42,7 +46,8 @@ public class LocacaoServiceTest {
 	@Before
 	public void setup() {
 		// Para auxiliar na criação de cenários que se repetem em todos testes.
-		locacaoService = new LocacaoService();
+		dao = mock(LocacaoDAO.class);
+		locacaoService = new LocacaoService(dao);
 	}
 	
 	// Ocorrerá depois de cada teste.
