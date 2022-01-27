@@ -7,11 +7,13 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.junit.Assume.assumeTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -25,6 +27,7 @@ import org.junit.rules.ErrorCollector;
 
 import br.com.testes.builder.FilmeBuilder;
 import br.com.testes.builder.UsuarioBuilder;
+import br.com.testes.dao.EmailService;
 import br.com.testes.dao.LocacaoDAO;
 import br.com.testes.dao.SPCService;
 import br.com.testes.entidades.Filme;
@@ -43,6 +46,8 @@ public class LocacaoServiceTest {
 
 	private LocacaoService locacaoService;
 	
+	private EmailService emailService;
+	
 	@Rule
 	public ErrorCollector errorCollector = new ErrorCollector();
 	
@@ -52,7 +57,8 @@ public class LocacaoServiceTest {
 		// Para auxiliar na criação de cenários que se repetem em todos testes.
 		dao = mock(LocacaoDAO.class);
 		spcService = mock(SPCService.class);
-		locacaoService = new LocacaoService(dao, spcService);
+		emailService = mock(EmailService.class);
+		locacaoService = new LocacaoService(dao, spcService, emailService);
 	}
 	
 	// Ocorrerá depois de cada teste.
@@ -301,6 +307,29 @@ public class LocacaoServiceTest {
 		// Ação e validação
 		LocadoraException ex = assertThrows(LocadoraException.class, () -> locacaoService.alugarFilme(usuario, Arrays.asList(f1)));
 		assertEquals("Usuário negativado!", ex.getMessage());
+	
+		verify(spcService).possuiNegativacao(usuario);
+	}
+	
+	@Test
+	public void deveEnviarEmailParaLocacoesAtrasadas() {
+		
+		// Cenário
+		Usuario usuario = UsuarioBuilder.umUsuario().comNome("Henrique").criar();
+		
+		Locacao l1 = new Locacao();
+		l1.setDataRetorno(DataUtils.obterDataComDiferencaDias(-2));
+		l1.setUsuario(usuario);
+		
+		List<Locacao> locacoesAtrasadas = Arrays.asList(l1);
+		
+		// Configurando o retorno do mock.
+		when(dao.obterLocacoesPendentes()).thenReturn(locacoesAtrasadas);
+		
+		locacaoService.notificarAtraso();
+		
+		// Verificando se o método foi invocado.
+		verify(emailService).enviar(usuario);
 	}
 
 }

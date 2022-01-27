@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import br.com.testes.dao.EmailService;
 import br.com.testes.dao.LocacaoDAO;
 import br.com.testes.dao.SPCService;
 import br.com.testes.entidades.Filme;
@@ -21,9 +22,12 @@ public class LocacaoService {
 	
 	private SPCService spcService;
 	
-	public LocacaoService(LocacaoDAO dao, SPCService spcService) {
+	private EmailService emailService;
+	
+	public LocacaoService(LocacaoDAO dao, SPCService spcService, EmailService emailService) {
 		this.dao = dao;
 		this.spcService = spcService;
+		this.emailService = emailService;
 	}
 
 	public Locacao alugarFilme(Usuario usuario, List<Filme> filmes) {
@@ -56,6 +60,12 @@ public class LocacaoService {
 		dao.salvar(locacao);
 
 		return locacao;
+	}
+	
+	public void notificarAtraso() {
+		dao.obterLocacoesPendentes().forEach(l -> {
+			emailService.enviar(l.getUsuario());
+		});
 	}
 
 	private Double obterValoresComDescontos(Double valorTotalSemDesconto, List<Filme> filmes) {

@@ -38,4 +38,9 @@ public class Usuario {
 		return Objects.equals(nome, other.nome);
 	}
 
+	@Override
+	public String toString() {
+		return "Usuario [nome=" + nome + "]";
+	}
+
 }

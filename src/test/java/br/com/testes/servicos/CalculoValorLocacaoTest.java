@@ -15,6 +15,7 @@ import org.junit.runners.Parameterized.Parameters;
 
 import br.com.testes.builder.FilmeBuilder;
 import br.com.testes.builder.UsuarioBuilder;
+import br.com.testes.dao.EmailService;
 import br.com.testes.dao.LocacaoDAO;
 import br.com.testes.dao.SPCService;
 import br.com.testes.entidades.Filme;
@@ -30,6 +31,8 @@ public class CalculoValorLocacaoTest {
 	private SPCService spcService;
 	
 	private LocacaoService locacaoService;
+	
+	private EmailService emailService;
 
 	@Parameter(value = 0)
 	public List<Filme> filmes; // Irá representar o 1º índice de cada coleção de objetos do getParametros().
@@ -44,7 +47,8 @@ public class CalculoValorLocacaoTest {
 	public void init() {
 		dao = mock(LocacaoDAO.class);
 		spcService = mock(SPCService.class);
-		locacaoService = new LocacaoService(dao, spcService);
+		emailService = mock(EmailService.class);
+		locacaoService = new LocacaoService(dao, spcService, emailService);
 	}
 	
 	private static Filme f1 = FilmeBuilder.umFilme().comNome("Duro de matar").comEstoque(1).comPrecoDeLocacao(4.0).criar();
