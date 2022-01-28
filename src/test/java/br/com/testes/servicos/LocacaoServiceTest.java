@@ -28,6 +28,7 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Matchers;
@@ -47,8 +48,10 @@ import br.com.testes.entidades.Usuario;
 import br.com.testes.exceptions.FilmeSemEstoqueException;
 import br.com.testes.exceptions.LocadoraException;
 import br.com.testes.matchers.MatchersProprios;
+import br.com.testes.runners.ParallelRunner;
 import br.com.testes.utils.DataUtils;
 
+@RunWith(ParallelRunner.class)
 public class LocacaoServiceTest {
 	
 	@Mock
@@ -69,6 +72,7 @@ public class LocacaoServiceTest {
 	// Ocorrerá antes de cada teste.
 	@Before
 	public void setup() {
+		System.out.println("Before");
 		// Para auxiliar na criação de cenários que se repetem em todos testes e configurações iniciais.
 		MockitoAnnotations.initMocks(this);
 	}
@@ -76,7 +80,7 @@ public class LocacaoServiceTest {
 	// Ocorrerá depois de cada teste.
 	@After
 	public void tearDown() {
-		// System.out.println("After");
+		System.out.println("After");
 	}
 	
 	// Ocorrerá antes da classe ser inicializada.
