@@ -51,7 +51,7 @@ import br.com.testes.matchers.MatchersProprios;
 import br.com.testes.utils.DataUtils;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ LocacaoService.class, DataUtils.class })
+@PrepareForTest({ LocacaoService.class /*, DataUtils.class */ })
 @PowerMockIgnore("jdk.internal.reflect.*") // Rodar com JRE 11 instalada
 public class LocacaoServiceTest {
 	
@@ -103,7 +103,15 @@ public class LocacaoServiceTest {
 		Filme filme = FilmeBuilder.umFilme().comNome("Matrix").comEstoque(1).comPrecoDeLocacao(5.0).criar();
 
 		// Alterando os valores das instâncias de Date.class que são inicializadas com o construtor padrão na ação da classe LocacaoService.
-		PowerMockito.whenNew(Date.class).withNoArguments().thenReturn(DataUtils.obterData(28, 01, 2022));
+		// PowerMockito.whenNew(Date.class).withNoArguments().thenReturn(DataUtils.obterData(28, 01, 2022));
+		
+		Calendar calendar = Calendar.getInstance();
+		
+		calendar.set(2022, 0, 28);
+		
+		// Alterando os valores das chamadas do método estático da ação da classe LocacaoService.
+		PowerMockito.mockStatic(Calendar.class);
+		PowerMockito.when(Calendar.getInstance()).thenReturn(calendar);
 		
 		// Ação
 		Locacao locacao = locacaoService.alugarFilme(usuario, Arrays.asList(filme));
@@ -303,7 +311,15 @@ public class LocacaoServiceTest {
 		Filme f1 = FilmeBuilder.umFilme().comNome("Duro de matar").comEstoque(1).comPrecoDeLocacao(4.0).criar();
 		
 		// Alterando os valores das instâncias de Date.class que são inicializadas com o construtor padrão na ação da classe LocacaoService.
-		PowerMockito.whenNew(Date.class).withNoArguments().thenReturn(DataUtils.obterData(30, 01, 2022));
+		// PowerMockito.whenNew(Date.class).withNoArguments().thenReturn(DataUtils.obterData(30, 01, 2022));
+		
+		Calendar calendar = Calendar.getInstance();
+		
+		calendar.set(2022, 0, 30);
+		
+		// Alterando os valores das chamadas do método estático da ação da classe LocacaoService.
+		PowerMockito.mockStatic(Calendar.class);
+		PowerMockito.when(Calendar.getInstance()).thenReturn(calendar);
 		
 		// Ação
 		Locacao locacao = locacaoService.alugarFilme(usuario, Arrays.asList(f1));
@@ -315,7 +331,11 @@ public class LocacaoServiceTest {
 		errorCollector.checkThat(locacao.getDataRetorno(), MatchersProprios.caiEm(Calendar.MONDAY));
 		
 		// Verificando se o PowerMockito foi chamado duas vezes ao instanciar a classe Date com o construtor padrão na ação da classe LocacaoService.
-		PowerMockito.verifyNew(Date.class, times(2)).withNoArguments();
+		// PowerMockito.verifyNew(Date.class, times(2)).withNoArguments();
+		
+		// Verificando se o PowerMockito foi chamado duas vezes ao executar o método estático na ação da classe LocacaoService.
+		PowerMockito.verifyStatic(Calendar.class, times(2));
+		Calendar.getInstance();
 	}
 	
 	@Test
