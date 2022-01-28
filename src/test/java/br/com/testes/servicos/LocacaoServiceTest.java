@@ -37,6 +37,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import br.com.testes.builder.FilmeBuilder;
 import br.com.testes.builder.UsuarioBuilder;
@@ -461,4 +462,17 @@ public class LocacaoServiceTest {
 		PowerMockito.verifyPrivate(locacaoServiceSpyMockito).invoke("obterValoresComDescontos", 4.0, filmes);
 	}
 
+	@Test
+	public void deveCalcularValorLocacaoComDesconto() throws Exception {
+		// Cenário
+		Filme f1 = FilmeBuilder.umFilme().comNome("Duro de matar").comEstoque(1).comPrecoDeLocacao(4.0).criar();
+		List<Filme> filmes = Arrays.asList(f1);
+		
+		// Ação
+		Double valorComDesconto = (Double) Whitebox.invokeMethod(locacaoServiceSpyMockito, "obterValoresComDescontos", 4.0, filmes);
+		
+		// Validação
+		assertEquals(4.0, valorComDesconto, 0.1);
+	}
+	
 }
