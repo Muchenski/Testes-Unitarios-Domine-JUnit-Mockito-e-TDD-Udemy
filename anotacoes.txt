@@ -220,3 +220,11 @@
 	Um mock só passa pelo corpo do método concreto se chamarmos .thenCallRealMethod() e ele souber o que deve retornar no uso de determinados parâmetros.
 	
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	Limitações do Mockito:
+	
+	Não pode Mockar construtor de objetos, alterar comportamentos de métodos estáticos ou privados.
+
+	Para isso, podemos utilizar o PowerMock.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------

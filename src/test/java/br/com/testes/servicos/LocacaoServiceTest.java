@@ -29,8 +29,13 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Matchers;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import br.com.testes.builder.FilmeBuilder;
 import br.com.testes.builder.UsuarioBuilder;
@@ -45,6 +50,9 @@ import br.com.testes.exceptions.LocadoraException;
 import br.com.testes.matchers.MatchersProprios;
 import br.com.testes.utils.DataUtils;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({ LocacaoService.class, DataUtils.class })
+@PowerMockIgnore("jdk.internal.reflect.*") // Rodar com JRE 11 instalada
 public class LocacaoServiceTest {
 	
 	private LocacaoDAO dao;
@@ -89,13 +97,17 @@ public class LocacaoServiceTest {
 	// O próprio Junit irá gerenciar esta exceção lançada para cima que pode ser
 	// causada pelo locacaoService.alugarFilme(...).
 	@Test
-	public void deveRealizarLocacao() {
+	public void deveRealizarLocacao() throws Exception {
 		// Cenário -> Inicializa tudo que é necessário;
 		Usuario usuario = UsuarioBuilder.umUsuario().comNome("Henrique").criar();
 		Filme filme = FilmeBuilder.umFilme().comNome("Matrix").comEstoque(1).comPrecoDeLocacao(5.0).criar();
 
+		// Alterando os valores das instâncias de Date.class que são inicializadas com o construtor padrão na ação da classe LocacaoService.
+		PowerMockito.whenNew(Date.class).withNoArguments().thenReturn(DataUtils.obterData(28, 01, 2022));
+		
 		// Ação
 		Locacao locacao = locacaoService.alugarFilme(usuario, Arrays.asList(filme));
+		errorCollector.checkThat(locacao.getDataLocacao(), MatchersProprios.ehHojeComDiferencaDeDias(0));
 		errorCollector.checkThat(locacao.getDataRetorno(), MatchersProprios.ehHojeComDiferencaDeDias(1));
 	}
 
@@ -282,13 +294,16 @@ public class LocacaoServiceTest {
 	
 	// Só funciona nos sábados
 	@Test
-	public void deveDevolverNaSegundaAoAlugarNoSabado2() {
-		assumeTrue(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
+	public void deveDevolverNaSegundaAoAlugarNoSabado2() throws Exception {
+		// assumeTrue(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
 		
 		// Cenário
 		Usuario usuario = UsuarioBuilder.umUsuario().comNome("Henrique").criar();
 		
 		Filme f1 = FilmeBuilder.umFilme().comNome("Duro de matar").comEstoque(1).comPrecoDeLocacao(4.0).criar();
+		
+		// Alterando os valores das instâncias de Date.class que são inicializadas com o construtor padrão na ação da classe LocacaoService.
+		PowerMockito.whenNew(Date.class).withNoArguments().thenReturn(DataUtils.obterData(30, 01, 2022));
 		
 		// Ação
 		Locacao locacao = locacaoService.alugarFilme(usuario, Arrays.asList(f1));
@@ -298,6 +313,9 @@ public class LocacaoServiceTest {
 		// boolean segunda = DataUtils.verificarDiaSemana(locacao.getDataRetorno(), Calendar.MONDAY);
 		// assertTrue(segunda);
 		errorCollector.checkThat(locacao.getDataRetorno(), MatchersProprios.caiEm(Calendar.MONDAY));
+		
+		// Verificando se o PowerMockito foi chamado duas vezes ao instanciar a classe Date com o construtor padrão na ação da classe LocacaoService.
+		PowerMockito.verifyNew(Date.class, times(2)).withNoArguments();
 	}
 	
 	@Test
