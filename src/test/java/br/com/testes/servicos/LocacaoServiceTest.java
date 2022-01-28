@@ -2,6 +2,7 @@ package br.com.testes.servicos;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -61,6 +62,8 @@ public class LocacaoServiceTest {
 
 	private LocacaoService locacaoService;
 	
+	private LocacaoService locacaoServiceSpyMockito;
+	
 	private EmailService emailService;
 	
 	@Rule
@@ -74,6 +77,7 @@ public class LocacaoServiceTest {
 		spcService = mock(SPCService.class);
 		emailService = mock(EmailService.class);
 		locacaoService = new LocacaoService(dao, spcService, emailService);
+		locacaoServiceSpyMockito = PowerMockito.spy(locacaoService);
 	}
 	
 	// Ocorrerá depois de cada teste.
@@ -435,6 +439,26 @@ public class LocacaoServiceTest {
 		errorCollector.checkThat(locacaoRetornada.getValor(), is(12.0));
 		errorCollector.checkThat(locacaoRetornada.getDataLocacao(), MatchersProprios.ehHojeComDiferencaDeDias(0));
 		errorCollector.checkThat(locacaoRetornada.getDataRetorno(), MatchersProprios.ehHojeComDiferencaDeDias(3));
+	}
+	
+	@Test
+	public void deveAlugarFilmeSemCalcularValor() throws Exception {
+		
+		// Cenário
+		Usuario usuario = UsuarioBuilder.umUsuario().comNome("Henrique").criar();
+		Filme f1 = FilmeBuilder.umFilme().comNome("Duro de matar").comEstoque(1).comPrecoDeLocacao(4.0).criar();
+		List<Filme> filmes = Arrays.asList(f1);
+		
+		PowerMockito.doReturn(5.0).when(locacaoServiceSpyMockito, "obterValoresComDescontos", 4.0, filmes);
+		
+		// Ação
+		Locacao locacao = locacaoServiceSpyMockito.alugarFilme(usuario, filmes);
+		
+		// Verificação
+		assertEquals(5.0, locacao.getValor(), 0.1);
+		
+		// Verificando se o PowerMockito executou o método privado.
+		PowerMockito.verifyPrivate(locacaoServiceSpyMockito).invoke("obterValoresComDescontos", 4.0, filmes);
 	}
 
 }

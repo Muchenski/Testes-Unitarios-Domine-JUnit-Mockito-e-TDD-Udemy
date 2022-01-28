@@ -81,6 +81,8 @@ public class LocacaoService {
 	}
 
 	private Double obterValoresComDescontos(Double valorTotalSemDesconto, List<Filme> filmes) {
+		System.out.println("Estou calculando os descontos...");
+		
 		Double valorTotalComDesconto = valorTotalSemDesconto;
 		int numeroDeFilmes = filmes.size();
 
