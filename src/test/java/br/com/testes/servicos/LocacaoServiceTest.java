@@ -29,6 +29,7 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Matchers;
 
 import br.com.testes.builder.FilmeBuilder;
@@ -365,6 +366,37 @@ public class LocacaoServiceTest {
 		
 		// No método notificarAtraso() não queremos que nenhum método do spcService seja executado.
 		verifyZeroInteractions(spcService);
+	}
+	
+	@Test
+	public void deveProrrogarLocacao() {
+		
+		// Cenário
+		Usuario usuario = UsuarioBuilder.umUsuario().comNome("Henrique").criar();
+		
+		Filme f1 = FilmeBuilder.umFilme().comNome("Duro de matar").comEstoque(1).comPrecoDeLocacao(4.0).criar();
+		
+		Locacao locacao = new Locacao();
+		locacao.setDataLocacao(new Date());
+		locacao.setDataRetorno(DataUtils.adicionarDias(new Date(), 1));
+		locacao.setUsuario(usuario);
+		locacao.setFilmes(Arrays.asList(f1));
+		locacao.setValor(f1.getPrecoLocacao());
+		
+		// Ação
+		locacaoService.prorrogarLocacao(locacao, 3);
+		
+		// Verificação
+		ArgumentCaptor<Locacao> argumentCaptor = ArgumentCaptor.forClass(Locacao.class);
+		
+		// Capturando o argumento passado ao método salvar do dao, através do prorrogarLocacao.
+		verify(dao).salvar(argumentCaptor.capture());
+		
+		Locacao locacaoRetornada = argumentCaptor.getValue();
+		
+		errorCollector.checkThat(locacaoRetornada.getValor(), is(12.0));
+		errorCollector.checkThat(locacaoRetornada.getDataLocacao(), MatchersProprios.ehHojeComDiferencaDeDias(0));
+		errorCollector.checkThat(locacaoRetornada.getDataRetorno(), MatchersProprios.ehHojeComDiferencaDeDias(3));
 	}
 
 }

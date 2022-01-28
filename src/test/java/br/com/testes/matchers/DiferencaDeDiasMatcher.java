@@ -1,8 +1,8 @@
 package br.com.testes.matchers;
 
-import java.util.Calendar;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
@@ -19,10 +19,9 @@ public class DiferencaDeDiasMatcher extends TypeSafeMatcher<Date> {
 
 	@Override
 	public void describeTo(Description description) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(DataUtils.adicionarDias(new Date(), diferencaDeDias));
-		String dataPorExtenso = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, new Locale("pt", "BR"));
-		description.appendText(dataPorExtenso);
+		Date dataEsperada = DataUtils.obterDataComDiferencaDias(diferencaDeDias);
+		DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+		description.appendText(format.format(dataEsperada));
 	}
 
 	@Override

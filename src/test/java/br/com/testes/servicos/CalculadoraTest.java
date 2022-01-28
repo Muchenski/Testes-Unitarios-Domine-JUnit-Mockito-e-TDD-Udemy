@@ -7,8 +7,10 @@ import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
+
 
 public class CalculadoraTest {
 	
@@ -97,6 +99,43 @@ public class CalculadoraTest {
 		when(calculadora.somar(Mockito.eq(1), Mockito.anyInt())).thenReturn(656);
 		System.out.println(calculadora.somar(0, 99)); // 68985 -> Pois cumpre os requisitos do when(...) anterior.
 		System.out.println(calculadora.somar(1, 99)); // 656
+		
+	}
+	
+	@Test
+	public void argumetnCapturer() {
+		
+		Calculadora calculadora = mock(Calculadora.class);
+		
+		ArgumentCaptor<Integer> argumentCaptor = ArgumentCaptor.forClass(Integer.class);
+		
+		when(calculadora.somar(argumentCaptor.capture(), Mockito.anyInt())).thenReturn(99);
+		
+		// Ocorrerá um erro pois não houve execução da ação, logo o argumentCaptor não possuirá valor.
+		// System.out.println(argumentCaptor.getValue());
+
+		// Agora a ação foi executada a o argumentCaptor possuirá um valor.
+		assertEquals(99, calculadora.somar(1, 999));
+		
+		System.out.println("Valor do argumento: " + argumentCaptor.getValue()); // 1
+	}
+	
+	@Test
+	public void argumetnCapturer2() {
+		
+		Calculadora calculadora = mock(Calculadora.class);
+		
+		ArgumentCaptor<Integer> argumentCaptor = ArgumentCaptor.forClass(Integer.class);
+		
+		when(calculadora.somar(argumentCaptor.capture(), argumentCaptor.capture())).thenReturn(99);
+		
+		// Ocorrerá um erro pois não houve execução da ação, logo o argumentCaptor não possuirá valor.
+		// System.out.println(argumentCaptor.getAllValues());
+
+		// Agora a ação foi executada a o argumentCaptor possuirá um valor.
+		assertEquals(99, calculadora.somar(1, 999));
+		
+		System.out.println("Valor dos argumentos: " + argumentCaptor.getAllValues()); // [1, 999]
 	}
 
 }

@@ -69,6 +69,16 @@ public class LocacaoService {
 			}
 		});
 	}
+	
+	public void prorrogarLocacao(Locacao locacaoAtual, Integer quantidadeDeDias) {
+		Locacao novaLocacao = new Locacao();
+		novaLocacao.setUsuario(locacaoAtual.getUsuario());
+		novaLocacao.setValor(locacaoAtual.getValor() * quantidadeDeDias);
+		novaLocacao.setDataLocacao(new Date());
+		novaLocacao.setDataRetorno(DataUtils.obterDataComDiferencaDias(quantidadeDeDias));
+		novaLocacao.addFilmes(locacaoAtual.getFilmes());
+		dao.salvar(novaLocacao);
+	}
 
 	private Double obterValoresComDescontos(Double valorTotalSemDesconto, List<Filme> filmes) {
 		Double valorTotalComDesconto = valorTotalSemDesconto;
