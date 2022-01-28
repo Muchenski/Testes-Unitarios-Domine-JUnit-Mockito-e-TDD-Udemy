@@ -2,13 +2,10 @@ package br.com.testes.servicos;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.junit.Assume.assumeTrue;
 import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -16,6 +13,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -30,14 +28,13 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 import org.mockito.Matchers;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.reflect.Whitebox;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 
 import br.com.testes.builder.FilmeBuilder;
 import br.com.testes.builder.UsuarioBuilder;
@@ -52,19 +49,18 @@ import br.com.testes.exceptions.LocadoraException;
 import br.com.testes.matchers.MatchersProprios;
 import br.com.testes.utils.DataUtils;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ LocacaoService.class /*, DataUtils.class */ })
-@PowerMockIgnore("jdk.internal.reflect.*") // Rodar com JRE 11 instalada
 public class LocacaoServiceTest {
 	
+	@Mock
 	private LocacaoDAO dao;
 	
+	@Mock
 	private SPCService spcService;
 
+	@InjectMocks @Spy
 	private LocacaoService locacaoService;
-	
-	private LocacaoService locacaoServiceSpyMockito;
-	
+
+	@Mock
 	private EmailService emailService;
 	
 	@Rule
@@ -73,12 +69,8 @@ public class LocacaoServiceTest {
 	// Ocorrerá antes de cada teste.
 	@Before
 	public void setup() {
-		// Para auxiliar na criação de cenários que se repetem em todos testes.
-		dao = mock(LocacaoDAO.class);
-		spcService = mock(SPCService.class);
-		emailService = mock(EmailService.class);
-		locacaoService = new LocacaoService(dao, spcService, emailService);
-		locacaoServiceSpyMockito = PowerMockito.spy(locacaoService);
+		// Para auxiliar na criação de cenários que se repetem em todos testes e configurações iniciais.
+		MockitoAnnotations.initMocks(this);
 	}
 	
 	// Ocorrerá depois de cada teste.
@@ -107,16 +99,8 @@ public class LocacaoServiceTest {
 		Usuario usuario = UsuarioBuilder.umUsuario().comNome("Henrique").criar();
 		Filme filme = FilmeBuilder.umFilme().comNome("Matrix").comEstoque(1).comPrecoDeLocacao(5.0).criar();
 
-		// Alterando os valores das instâncias de Date.class que são inicializadas com o construtor padrão na ação da classe LocacaoService.
-		// PowerMockito.whenNew(Date.class).withNoArguments().thenReturn(DataUtils.obterData(28, 01, 2022));
-		
-		Calendar calendar = Calendar.getInstance();
-		
-		calendar.set(2022, 0, 28);
-		
-		// Alterando os valores das chamadas do método estático da ação da classe LocacaoService.
-		PowerMockito.mockStatic(Calendar.class);
-		PowerMockito.when(Calendar.getInstance()).thenReturn(calendar);
+
+		Mockito.doReturn(DataUtils.obterData(28, 1, 2022)).when(locacaoService).obterData();
 		
 		// Ação
 		Locacao locacao = locacaoService.alugarFilme(usuario, Arrays.asList(filme));
@@ -305,7 +289,6 @@ public class LocacaoServiceTest {
 		assertTrue(segunda);
 	}
 	
-	// Só funciona nos sábados
 	@Test
 	public void deveDevolverNaSegundaAoAlugarNoSabado2() throws Exception {
 		// assumeTrue(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
@@ -315,16 +298,7 @@ public class LocacaoServiceTest {
 		
 		Filme f1 = FilmeBuilder.umFilme().comNome("Duro de matar").comEstoque(1).comPrecoDeLocacao(4.0).criar();
 		
-		// Alterando os valores das instâncias de Date.class que são inicializadas com o construtor padrão na ação da classe LocacaoService.
-		// PowerMockito.whenNew(Date.class).withNoArguments().thenReturn(DataUtils.obterData(30, 01, 2022));
-		
-		Calendar calendar = Calendar.getInstance();
-		
-		calendar.set(2022, 0, 30);
-		
-		// Alterando os valores das chamadas do método estático da ação da classe LocacaoService.
-		PowerMockito.mockStatic(Calendar.class);
-		PowerMockito.when(Calendar.getInstance()).thenReturn(calendar);
+		Mockito.doReturn(DataUtils.obterData(29, 1, 2022)).when(locacaoService).obterData();
 		
 		// Ação
 		Locacao locacao = locacaoService.alugarFilme(usuario, Arrays.asList(f1));
@@ -335,12 +309,6 @@ public class LocacaoServiceTest {
 		// assertTrue(segunda);
 		errorCollector.checkThat(locacao.getDataRetorno(), MatchersProprios.caiEm(Calendar.MONDAY));
 		
-		// Verificando se o PowerMockito foi chamado duas vezes ao instanciar a classe Date com o construtor padrão na ação da classe LocacaoService.
-		// PowerMockito.verifyNew(Date.class, times(2)).withNoArguments();
-		
-		// Verificando se o PowerMockito foi chamado duas vezes ao executar o método estático na ação da classe LocacaoService.
-		PowerMockito.verifyStatic(Calendar.class, times(2));
-		Calendar.getInstance();
 	}
 	
 	@Test
@@ -441,26 +409,27 @@ public class LocacaoServiceTest {
 		errorCollector.checkThat(locacaoRetornada.getDataLocacao(), MatchersProprios.ehHojeComDiferencaDeDias(0));
 		errorCollector.checkThat(locacaoRetornada.getDataRetorno(), MatchersProprios.ehHojeComDiferencaDeDias(3));
 	}
-	
-	@Test
-	public void deveAlugarFilmeSemCalcularValor() throws Exception {
-		
-		// Cenário
-		Usuario usuario = UsuarioBuilder.umUsuario().comNome("Henrique").criar();
-		Filme f1 = FilmeBuilder.umFilme().comNome("Duro de matar").comEstoque(1).comPrecoDeLocacao(4.0).criar();
-		List<Filme> filmes = Arrays.asList(f1);
-		
-		PowerMockito.doReturn(5.0).when(locacaoServiceSpyMockito, "obterValoresComDescontos", 4.0, filmes);
-		
-		// Ação
-		Locacao locacao = locacaoServiceSpyMockito.alugarFilme(usuario, filmes);
-		
-		// Verificação
-		assertEquals(5.0, locacao.getValor(), 0.1);
-		
-		// Verificando se o PowerMockito executou o método privado.
-		PowerMockito.verifyPrivate(locacaoServiceSpyMockito).invoke("obterValoresComDescontos", 4.0, filmes);
-	}
+
+// Não conseguimos alterar o retorno de um método privado apenas com o Mockito.
+//	@Test
+//	public void deveAlugarFilmeSemCalcularValor() throws Exception {
+//		
+//		// Cenário
+//		Usuario usuario = UsuarioBuilder.umUsuario().comNome("Henrique").criar();
+//		Filme f1 = FilmeBuilder.umFilme().comNome("Duro de matar").comEstoque(1).comPrecoDeLocacao(4.0).criar();
+//		List<Filme> filmes = Arrays.asList(f1);
+//		
+//		// PowerMockito.doReturn(5.0).when(locacaoServiceSpyMockito, "obterValoresComDescontos", 4.0, filmes);
+//		
+//		// Ação
+//		Locacao locacao = locacaoService.alugarFilme(usuario, filmes);
+//		
+//		// Verificação
+//		assertEquals(4.0, locacao.getValor(), 0.1);
+//		
+//		// Verificando se o PowerMockito executou o método privado.
+//		// PowerMockito.verifyPrivate(locacaoServiceSpyMockito).invoke("obterValoresComDescontos", 4.0, filmes);
+//	}
 
 	@Test
 	public void deveCalcularValorLocacaoComDesconto() throws Exception {
@@ -468,8 +437,13 @@ public class LocacaoServiceTest {
 		Filme f1 = FilmeBuilder.umFilme().comNome("Duro de matar").comEstoque(1).comPrecoDeLocacao(4.0).criar();
 		List<Filme> filmes = Arrays.asList(f1);
 		
+		Class<LocacaoService> locacaoClzz = LocacaoService.class;
+		
+		Method obterValoresComDescontos = locacaoClzz.getDeclaredMethod("obterValoresComDescontos", Double.class, List.class);
+		obterValoresComDescontos.setAccessible(true);
+		
 		// Ação
-		Double valorComDesconto = (Double) Whitebox.invokeMethod(locacaoServiceSpyMockito, "obterValoresComDescontos", 4.0, filmes);
+		Double valorComDesconto = (Double) obterValoresComDescontos.invoke(locacaoService, 4.0, filmes);
 		
 		// Validação
 		assertEquals(4.0, valorComDesconto, 0.1);

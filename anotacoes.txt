@@ -226,5 +226,9 @@
 	Não pode Mockar construtor de objetos, alterar comportamentos de métodos estáticos ou privados.
 
 	Para isso, podemos utilizar o PowerMock.
+	
+	O PowerMock acaba alterando a análise de cobertura.
+	
+	Podemos deixar de utilizar o PowerMock se nosso código for realmente testável e com pouca complexidade.
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
