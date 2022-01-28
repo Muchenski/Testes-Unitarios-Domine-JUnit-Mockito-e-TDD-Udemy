@@ -204,3 +204,19 @@
 	System.out.println(calculadora.somar(5, 5)); // 68985
 	
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	@Spy vs @Mock
+		
+	Spy não pode ser utilizado em interfaces, pois quando um @Spy não possui uma instrução de retorno para determinados parâmetros, ele tentará executar o método
+	da implementação da classe.
+	
+	Quando chamamos o when(...) e definimos uma expectativa para um método de um Spy, neste momento o método concreto da classe é executado.
+	
+	Devemos utilizar Mockito.doReturn(<valor de retorno>).when(spy).somar(<x>, <y>), assim não executamos o método concreto ao criar a expectativa.
+	
+	Quando um Spy não entende o que deve retornar para determinados parâmetros, ele irá executar o método concreto da classe.
+	Quando entende, ele não executa o método concreto.
+	
+	Um mock só passa pelo corpo do método concreto se chamarmos .thenCallRealMethod() e ele souber o que deve retornar no uso de determinados parâmetros.
+	
+----------------------------------------------------------------------------------------------------------------------------------------------------------------

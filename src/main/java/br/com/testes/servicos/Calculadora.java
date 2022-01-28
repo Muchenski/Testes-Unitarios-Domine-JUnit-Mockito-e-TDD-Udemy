@@ -3,6 +3,7 @@ package br.com.testes.servicos;
 public class Calculadora {
 
 	public int somar(int primeiroValor, int segundoValor) {
+		System.out.println("Estou executando o método somar!");
 		return primeiroValor + segundoValor;
 	}
 
@@ -15,6 +16,10 @@ public class Calculadora {
 			throw new ArithmeticException("O segundo valor não pode ser 0!");
 		}
 		return primeiroValor / segundoValor;
+	}
+	
+	public void imprime() {
+		System.out.println("Imprime...");
 	}
 
 }
