@@ -232,3 +232,9 @@
 	Podemos deixar de utilizar o PowerMock se nosso código for realmente testável e com pouca complexidade.
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	Por padrão, o @RunWith() das classes de teste são executadas com BlockJUnit4ClassRunner.
+	
+	O PowerMockRunner.class não extende BlockJUnit4ClassRunner, e isso é um requisito necessário para o Surefire utilizar paralelismo entre todos testes e todas classes.
+	
+	Os testes do Surefire devem ser executados pelo Maven.

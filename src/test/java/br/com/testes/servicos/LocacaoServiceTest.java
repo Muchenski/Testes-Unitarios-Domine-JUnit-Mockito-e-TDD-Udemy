@@ -51,7 +51,7 @@ import br.com.testes.matchers.MatchersProprios;
 import br.com.testes.runners.ParallelRunner;
 import br.com.testes.utils.DataUtils;
 
-@RunWith(ParallelRunner.class)
+// @RunWith(ParallelRunner.class)
 public class LocacaoServiceTest {
 	
 	@Mock

@@ -8,6 +8,7 @@ import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.RunnerScheduler;
 
+// Executa testes paralelos em cada classe, mas não executa as classes em paralelo.
 public class ParallelRunner extends BlockJUnit4ClassRunner {
 
 	public ParallelRunner(Class<?> testClass) throws InitializationError {
